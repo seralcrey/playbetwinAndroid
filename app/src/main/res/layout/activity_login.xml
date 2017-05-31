@@ -38,7 +38,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
+            android:id="@+id/textUsuario"
             android:layout_gravity="center_horizontal"
             android:layout_marginBottom="20dp"
             android:inputType="text" />
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:id="@+id/editText2"
+            android:id="@+id/textPass"
             android:layout_gravity="center_horizontal" />
 
         <Button
@@ -66,6 +66,25 @@
             android:id="@+id/btIniciar"
             android:layout_gravity="center_horizontal"
             android:onClick="abrir" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Usuario o contraseña incorrecta"
+            android:id="@+id/textErrror"
+            android:layout_gravity="center_horizontal"
+            android:textColor="#ff0000"
+            android:visibility="invisible" />
+
+        <Button
+            android:layout_width="124dp"
+            android:layout_height="wrap_content"
+            android:text="@string/registrarse"
+            android:id="@+id/button2"
+            android:layout_gravity="center_horizontal"
+            android:background="#21a4d8"
+            android:textColor="#ffffff"
+            android:onClick="abrirRegistro" />
 
     </LinearLayout>
 </RelativeLayout>

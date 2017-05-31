@@ -5,9 +5,152 @@
     tools:context="com.example.sergio.playbetwincliente.Tienda">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="tiendas" />
+        android:id="@+id/scrollView4" >
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="left|top">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/imageTienda1"
+                android:layout_row="0"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comprar"
+                android:id="@+id/comprar1"
+                android:layout_row="1"
+                android:layout_column="0"
+                android:nestedScrollingEnabled="false"
+                android:onClick="comprar"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/imageTienda2"
+                android:layout_row="2"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comprar"
+                android:id="@+id/comprar2"
+                android:layout_row="3"
+                android:layout_column="0"
+                android:onClick="comprar"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/imageTienda3"
+                android:layout_row="4"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comprar"
+                android:id="@+id/comprar3"
+                android:layout_row="5"
+                android:layout_column="0"
+                android:onClick="comprar"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/imageTienda4"
+                android:layout_row="6"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comprar"
+                android:id="@+id/comprar4"
+                android:layout_row="7"
+                android:layout_column="0"
+                android:onClick="comprar"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/imageTienda5"
+                android:layout_row="8"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comprar"
+                android:id="@+id/comprar5"
+                android:layout_row="9"
+                android:layout_column="0"
+                android:onClick="comprar"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/imageTienda6"
+                android:layout_row="10"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comprar"
+                android:id="@+id/comprar6"
+                android:layout_row="11"
+                android:layout_column="0"
+                android:onClick="comprar"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:id="@+id/imageTienda7"
+                android:layout_row="12"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Comprar"
+                android:id="@+id/comprar7"
+                android:layout_row="13"
+                android:layout_column="0"
+                android:onClick="comprar"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:textStyle="bold" />
+
+        </GridLayout>
+    </ScrollView>
 
 </FrameLayout>

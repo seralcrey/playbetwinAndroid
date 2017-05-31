@@ -5,9 +5,231 @@
     tools:context="com.example.sergio.playbetwincliente.Perfil">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="perfil" />
+        android:id="@+id/scrollView2" >
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="nick"
+                android:id="@+id/textNick"
+                android:layout_row="0"
+                android:layout_column="0" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="coins"
+                android:id="@+id/textCoins"
+                android:layout_row="0"
+                android:layout_column="2" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="Nombre"
+                android:id="@+id/textNombre"
+                android:layout_row="1"
+                android:layout_column="0" />
+
+            <Button
+                android:layout_width="193dp"
+                android:layout_height="wrap_content"
+                android:text="Cambiar contraseña"
+                android:id="@+id/btCambiarContraseña"
+                android:layout_row="2"
+                android:layout_column="1"
+                android:onClick="cambiarContraseña"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:visibility="visible"
+                android:layout_columnSpan="2"
+                android:layout_gravity="right" />
+
+            <Button
+                android:layout_width="121dp"
+                android:layout_height="wrap_content"
+                android:text="Cancelar"
+                android:id="@+id/btCancelarContraseña"
+                android:layout_row="7"
+                android:layout_column="2"
+                android:onClick="cambiarContraseña"
+                android:visibility="gone"
+                android:background="#0d3f53"
+                android:textColor="#ffffff"
+                android:layout_gravity="right" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ultimaApuesta1"
+                android:id="@+id/ultimaApuesta1"
+                android:layout_row="9"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:layout_margin="1dp"
+                android:onClick="abrirEven" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ultimaApuesta2"
+                android:id="@+id/ultimaApuesta2"
+                android:layout_row="10"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:layout_margin="1dp"
+                android:onClick="abrirEven" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ultimaApuesta3"
+                android:id="@+id/ultimaApuesta3"
+                android:layout_row="11"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:layout_margin="1dp"
+                android:onClick="abrirEven" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Contraseña"
+                android:id="@+id/texContraseña"
+                android:layout_row="3"
+                android:layout_column="0"
+                android:visibility="gone" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/pass1"
+                android:layout_row="4"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:visibility="gone" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Confirmar"
+                android:id="@+id/textConfirmar"
+                android:layout_row="5"
+                android:layout_column="0"
+                android:visibility="gone" />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/pass2"
+                android:layout_row="6"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:visibility="gone" />
+
+            <Button
+                android:layout_width="186dp"
+                android:layout_height="wrap_content"
+                android:text="Cambiar contraseña"
+                android:id="@+id/btCambiarContr"
+                android:layout_row="7"
+                android:layout_column="0"
+                android:visibility="gone"
+                android:onClick="cambiarC"
+                android:background="#0d3f53"
+                android:textColor="#ffffff" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ultimaApuesta4"
+                android:id="@+id/ultimaApuesta4"
+                android:layout_row="12"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:layout_margin="1dp"
+                android:onClick="abrirEven" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ultimaApuesta5"
+                android:id="@+id/ultimaApuesta5"
+                android:layout_row="13"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:layout_margin="1dp"
+                android:onClick="abrirEven" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ultimaApuesta6"
+                android:id="@+id/ultimaApuesta6"
+                android:layout_row="14"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:layout_margin="1dp"
+                android:onClick="abrirEven" />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ultimaApuesta7"
+                android:id="@+id/ultimaApuesta7"
+                android:layout_row="15"
+                android:layout_column="0"
+                android:layout_columnSpan="3"
+                android:layout_margin="1dp"
+                android:onClick="abrirEven" />
+
+            <Button
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:text="&lt;"
+                android:id="@+id/btMenosPerfil"
+                android:layout_row="16"
+                android:layout_column="0"
+                android:onClick="menosPaginacion" />
+
+            <Button
+                android:layout_width="40dp"
+                android:layout_height="wrap_content"
+                android:text=">"
+                android:id="@+id/btMasPerfil"
+                android:layout_row="16"
+                android:layout_column="2"
+                android:layout_gravity="right"
+                android:onClick="masPaginacion" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Mis apuestas"
+                android:id="@+id/textView3"
+                android:layout_row="8"
+                android:layout_column="0" />
+        </GridLayout>
+    </ScrollView>
 
 </FrameLayout>
