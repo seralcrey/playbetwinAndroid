@@ -1,12 +1,16 @@
 package com.example.sergio.playbetwincliente;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInstaller;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Interpolator;
 import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -62,6 +66,7 @@ public class Principal extends ActionBarActivity {
     /*
      DECLARACIONES
      */
+
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle drawerToggle;
@@ -78,11 +83,16 @@ public class Principal extends ActionBarActivity {
     private ArrayList<Integer> listaIdPartidos;
     private int coinsActual =0;
     //Publi
-    private String url;
+    private String urlPubli;
     private int idPubli;
     private int coinsPubli;
     private boolean cogerPublicdad=false;
     private boolean darDineroPublicidad = false;
+
+    String direccion = "http://192.168.1.3:8080";
+
+
+
 
     //Paginacion
     private int pagPerfil = 7;
@@ -105,6 +115,55 @@ public class Principal extends ActionBarActivity {
     }
 
 
+    private int pagEvento = 15;
+    private String where = "";
+
+    public void masPaginacionEvento(View view){
+        pagEvento+=15;
+        opcion=0;
+        DownloadTask dw = new DownloadTask();
+        String con = ("SELECT count(*) FROM v_eventos_participantes where activado=true and fecha_hora > now() "+ where +"  order by fecha_hora;" ).replace(" ", "%20");
+
+        dw.execute(con);
+    }
+
+    public void menosPaginacionEvento(View view){
+        pagEvento-=15;
+        opcion=0;
+        DownloadTask dw = new DownloadTask();
+        String con = ("SELECT count(*) FROM v_eventos_participantes where activado=true and fecha_hora > now() "+ where +"  order by fecha_hora;" ).replace(" ", "%20");
+
+        dw.execute(con);
+    }
+
+    public void buscarEvento(View view){
+        opcion=0;
+        DownloadTask dw = new DownloadTask();
+
+        switch (view.getId()){
+            case R.id.tbFutbol:
+                where = " and deporte='Fútbol' ";
+                break;
+            case R.id.btBaloncesto:
+                where = " and deporte='Baloncesto' ";
+                break;
+            case R.id.btTenis:
+                where = " and deporte='Tenis' ";
+                break;
+            case R.id.btSport:
+                where = " and deporte='E-sport' ";
+                break;
+            case R.id.btOtros:
+                where = " and deporte='Mas deportes' ";
+                break;
+        }
+
+        String con = ("SELECT count(*) FROM v_eventos_participantes where activado=true and fecha_hora > now() "+ where +"  order by fecha_hora;" ).replace(" ", "%20");
+
+        dw.execute(con);
+
+    }
+
     //Evento
 
     int idEvento;
@@ -117,7 +176,7 @@ public class Principal extends ActionBarActivity {
 
     public void abrirNavegador(View view){
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(url));
+        intent.setData(Uri.parse(urlPubli));
         startActivity(intent);
         DownloadTask ressul = new DownloadTask();
         String consulta = ("insert into usuarios_publicidad (id_usuario, id_publicidad, fecha)  value ("+ idUsuario +","+ idPubli+",now())").replace(" ", "%20");
@@ -148,7 +207,7 @@ public class Principal extends ActionBarActivity {
 
 
                         DownloadTask ressul = new DownloadTask();
-                        String consulta = ("http://192.168.0.201:8080/usuario/apostar.php?pronostico=" + pronosticoActual + "&id_usuario=" + idUsuario + "&id_evento=" + idEvento + "&coins=" + c.getText().toString().trim()).replace(" ", "%20");
+                        String consulta = (direccion  +"/usuario/apostar.php?pronostico=" + pronosticoActual + "&id_usuario=" + idUsuario + "&id_evento=" + idEvento + "&coins=" + c.getText().toString().trim()).replace(" ", "%20");
                         TextView coinsEve = (TextView) findViewById(R.id.coinsEvento);
                         coinsActual = coinsActual - Integer.parseInt(c.getText().toString().trim());
                         coinsEve.setText("Aun dispone de " + coinsActual + " coins para apostar");
@@ -202,6 +261,9 @@ public class Principal extends ActionBarActivity {
     String precio;
     String id_producto;
 
+
+
+
     private ArrayList<ArrayList> productos;
     public void comprar(View v){
 
@@ -241,6 +303,7 @@ public class Principal extends ActionBarActivity {
     }
 
     private boolean comprar = false;
+    private boolean cogerMasApostado = false;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -270,10 +333,11 @@ public class Principal extends ActionBarActivity {
 
                     if (coinsPro.length() >0){
                         DownloadTask ressul = new DownloadTask();
-                        String consulta = ("http://192.168.0.201:8080/usuario/comprar.php?referencia_paypal="+referencia_paypal+"&estado_paypal="+estado_paypal+"&precio_total="+precio_total+"&id_producto="+id_producto+"&id_usuario="+idUsuario+"&coins="+coinsPro ).replace(" ", "%20");
+                        String consulta = (direccion + "/usuario/comprar.php?referencia_paypal="+referencia_paypal+"&estado_paypal="+estado_paypal+"&precio_total="+precio_total+"&id_producto="+id_producto+"&id_usuario="+idUsuario+"&coins="+coinsPro ).replace(" ", "%20");
                         ressul.execute(consulta);
                         opcion=30;
                         comprar=true;
+
                     }
 
                     } catch (JSONException e) {
@@ -287,6 +351,68 @@ public class Principal extends ActionBarActivity {
             } else if (resultCode == PaymentActivity.RESULT_EXTRAS_INVALID) {
                 Log.i("paymentExample", "An invalid Payment or PayPalConfiguration was submitted. Please see the docs.");
             }
+        }
+    }
+
+    private String coinsPremios;
+    private String id_premio;
+    private boolean premios;
+
+
+    public void abrir(){
+        DownloadTask ressul = new DownloadTask();
+        premios = true;
+        String consulta = (direccion + "/usuario/conseguirPremios.php?id_premio="+id_premio+"&id_usuario="+idUsuario+"&coins="+coinsPremios ).replace(" ", "%20");
+        ressul.execute(consulta);
+        opcion=20;
+        Intent i = new Intent(this, PremiosConseguidosActivity.class);
+        startActivity(i);
+    }
+
+
+    public void conseguirPremios(View v){
+
+        coinsPremios = "";
+
+
+        for (int i=0;i<listaBotones.size();i++){
+            if(listaBotones.get(i)== v.getId()){
+                id_premio = productos.get(i).get(0).toString();
+                coinsPremios = productos.get(i).get(2).toString();
+
+            }
+        }
+
+        if(coinsPremios != "" && Integer.parseInt(coinsPremios.trim()) < coinsActual) {
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(Principal.this);
+
+            builder.setTitle("Premio")
+                    .setMessage("Si consigues este premio se te restara de tus coins")
+                    .setPositiveButton("Conseguir premio",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    abrir();
+                                }
+                            })
+                    .setNegativeButton("CANCELAR",
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            });
+
+
+            builder.show();
+        } else {
+            Toast toast1 =
+                    Toast.makeText(getApplicationContext(),
+                            "No tienes suficientes coins",
+                            Toast.LENGTH_LONG);
+
+            toast1.show();
         }
     }
 
@@ -405,16 +531,11 @@ public class Principal extends ActionBarActivity {
     }
 
 
-    public void consePremios(View view){
-        enviarCorreos( );
-    }
+
 
     //Enviar correos
 
-    public void enviarCorreos(){
 
-        new Email("sergio.alcantara.1992@gmail.com","asdas","asdasdas");
-    }
 
     public void abrirEven(View v){
         for (int i=0;i<listaIdPartidos.size();i++){
@@ -540,10 +661,36 @@ public class Principal extends ActionBarActivity {
                 ressul1.execute(consulta1);
                 break;
             case 2:
-                Eventos fragment3 = new Eventos();
+                VerEvento fragment3 = new VerEvento();
                 args.putInt(ArticleFragment.ARG_ARTICLES_NUMBER, position);
                 //fragment.setArguments(args);
                 fragmentManager.beginTransaction().replace(R.id.content_frame, fragment3).commit();
+
+                listaBotones = new ArrayList<>();
+                listaBotones.add(R.id.evento1);
+                listaBotones.add(R.id.evento2);
+                listaBotones.add(R.id.evento3);
+                listaBotones.add(R.id.evento4);
+                listaBotones.add(R.id.evento5);
+                listaBotones.add(R.id.evento6);
+                listaBotones.add(R.id.evento7);
+                listaBotones.add(R.id.evento8);
+                listaBotones.add(R.id.evento9);
+                listaBotones.add(R.id.evento10);
+                listaBotones.add(R.id.evento11);
+                listaBotones.add(R.id.evento12);
+                listaBotones.add(R.id.evento13);
+                listaBotones.add(R.id.evento14);
+                listaBotones.add(R.id.evento15);
+
+                pagEvento = 15;
+                where = "";
+                opcion = 0;
+                DownloadTask dw = new DownloadTask();
+                String con = ("SELECT count(*) FROM v_eventos_participantes where activado=true and fecha_hora > now() order by fecha_hora;").replace(" ", "%20");
+
+                dw.execute(con);
+
                 break;
             case 3:
                 Tienda fragment4 = new Tienda();
@@ -631,7 +778,7 @@ public class Principal extends ActionBarActivity {
     public void ponerImagePubli(){
         ImageView image = (ImageView) findViewById(R.id.imagenPublicidad);
         Glide.with(this).
-                load("http://192.168.0.201:8080/publicidad/"+idPubli+".jpg").
+                load(direccion + "/publicidad/"+idPubli+".jpg").
                 placeholder(R.drawable.ic_conectado).
                 into(image);
     }
@@ -639,7 +786,7 @@ public class Principal extends ActionBarActivity {
     public void abrirImagen(ImageView im, int id){
 
         Glide.with(this).
-                load("http://192.168.0.201:8080/tienda/"+id+".jpg").
+                load(direccion + "/tienda/"+id+".jpg").
                 placeholder(R.drawable.ic_conectado).
                 into(im);
     }
@@ -647,7 +794,7 @@ public class Principal extends ActionBarActivity {
     public void abrirPremios(ImageView im, int id){
 
         Glide.with(this).
-                load("http://192.168.0.201:8080/premios/"+id+".png").
+                load(direccion + "/premios/"+id+".png").
                 placeholder(R.drawable.ic_conectado).
                 into(im);
     }
@@ -725,12 +872,21 @@ public class Principal extends ActionBarActivity {
         boolean termino = false;
         String resultado;
         String url="";
-
+        ProgressDialog progress;
 
         public DownloadTask(){
+            try {
+                runOnUiThread(new Runnable() {
+                    public void run() {
+                        progress = ProgressDialog.show(Principal.this, null, "Cargando contenido", true, false);
 
+
+                    }
+                });
+            } catch (Exception e) {
+
+            }
         }
-
 
         @Override
         protected String doInBackground(String... params) {
@@ -787,9 +943,12 @@ public class Principal extends ActionBarActivity {
                         break;
                     // muestra cuantas apuesta tiene un usaurio
                     case 2:
-                        int total = (Integer.parseInt(res[0].trim())-1) - (pagPerfil-7);
+                        int total = (Integer.parseInt(res[0].trim())) - (pagPerfil-7);
                         Button bmenos = (Button) findViewById(R.id.btMenosPerfil);
                         Button bmas = (Button) findViewById(R.id.btMasPerfil);
+                        if(total<0){
+                            total=0;
+                        }
                         if (total <= 7) {
                             for (int i = total; i < listaBotones.size(); i++) {
                                 Button n = (Button) findViewById(listaBotones.get(i));
@@ -813,7 +972,7 @@ public class Principal extends ActionBarActivity {
                             bmenos.setVisibility(View.GONE);
                         opcion = 3;
                         DownloadTask dw2 = new DownloadTask();
-                        String con2 = ("SELECT id_evento, participante_casa , participante_visitante , fecha_hora , deporte FROM v_apuestas where id_usuario=" + idUsuario + " group by id_evento order by id DESC Limit " + (pagPerfil - 7) + " , " + (pagPerfil + 1) + ";").replace(" ", "%20");
+                        String con2 = ("SELECT id_evento, participante_casa , participante_visitante , fecha_hora , deporte FROM v_apuestas where id_usuario=" + idUsuario + " group by id_evento order by id DESC Limit " + (pagPerfil - 7) + " , " + pagPerfil + ";").replace(" ", "%20");
 
                         dw2.execute(con2);
                         break;
@@ -848,6 +1007,7 @@ public class Principal extends ActionBarActivity {
                         }
                         break;
                 }
+                progress.dismiss();
             }
             else if (posicion == 1) {
                 switch (opcion) {
@@ -869,7 +1029,7 @@ public class Principal extends ActionBarActivity {
                         if (res.length>2) {
                             Button btoPu = (Button) findViewById(R.id.BotonPubli);
                             coinsPubli = Integer.parseInt(res[3].trim());
-                            url = res[2].trim();
+                            urlPubli = res[2].trim();
                             idPubli = Integer.parseInt(res[0].trim());
                             btoPu.setText("Gana " + res[3].trim() + " coins");
 
@@ -883,7 +1043,8 @@ public class Principal extends ActionBarActivity {
 
                         DownloadTask dw23 = new DownloadTask();
                         opcion=3;
-                        dw23.execute("select count(*) as total, id_evento,participante_casa,participante_visitante,deporte,fecha_hora  from v_apuestas group by id_evento order by total desc limit 5");
+                        cogerMasApostado = true;
+                        dw23.execute(direccion + "/usuario/cogerMasApostado.php");
                         break;
                     case 2:
                         Button btoPu = (Button) findViewById(R.id.BotonPubli);
@@ -891,24 +1052,59 @@ public class Principal extends ActionBarActivity {
                         btoPu.setVisibility(View.GONE);
                         img.setVisibility(View.GONE);
                         DownloadTask dw = new DownloadTask();
+                        darDineroPublicidad =true;
                         opcion=99;
                         dw.execute("");
                         break;
                     case 3:
-                        Button inipar1 = (Button) findViewById(R.id.inipart1);
-                        Button inipar2 = (Button) findViewById(R.id.inipart2);
-                        Button inipar3 = (Button) findViewById(R.id.inipart3);
-                        Button inipar4 = (Button) findViewById(R.id.inipart4);
-                        Button inipar5 = (Button) findViewById(R.id.inipart5);
+
+                        listaBotones = new ArrayList<>();
+                        listaBotones.add(R.id.inipart1);
+                        listaBotones.add(R.id.inipart2);
+                        listaBotones.add(R.id.inipart3);
+                        listaBotones.add(R.id.inipart4);
+                        listaBotones.add(R.id.inipart5);
+
+                        listaIdPartidos = new ArrayList<>();
+
+                        int index = 0;
+
+                        for (int i=0;i<res.length;i=i+6){
+
+                            Button b = (Button) findViewById(listaBotones.get(index));
+                            listaIdPartidos.add(Integer.parseInt(res[i+1].trim()));
+                            b.setText(res[i+2].trim() + " vs " + res[i+3].trim() + " \n" + res[i+5].trim() );
+                            switch (res[i + 4].trim()) {
+                                case "Fútbol":
+                                    b.setBackgroundColor(Color.rgb(186, 255, 186));
+                                    break;
+                                case "Baloncesto":
+                                    b.setBackgroundColor(Color.rgb(255, 215, 186));
+                                    break;
+                                case "Tenis":
+                                    b.setBackgroundColor(Color.rgb(251, 255, 186));
+                                    break;
+                                case "E-sport":
+                                    b.setBackgroundColor(Color.rgb(236, 186, 255));
+                                    break;
+                                case "Mas deportes":
+                                    b.setBackgroundColor(Color.rgb(186, 255, 251));
+                                    break;
+
+                            }
+                            index++;
+                        }
 
 
                 }
+
             } else if (posicion == 10) {
                 TextView casa = (TextView) findViewById(R.id.EquipoCasa);
                 TextView visi = (TextView) findViewById(R.id.EquipoVIsitante);
                 Button b1= (Button) findViewById(R.id.apusta1);
                 Button b2= (Button) findViewById(R.id.apuesta2);
                 Button bx= (Button) findViewById(R.id.apuestaX);
+                TextView fech = (TextView) findViewById(R.id.textFechaEvent);
                 switch (opcion){
                     case 0:
 
@@ -923,7 +1119,9 @@ public class Principal extends ActionBarActivity {
                         b2.setText(2 + " (" + res[5].trim() + ")");
 
                         fechaEvento = res[6].trim();
-                        if(res.length==8){
+
+                        fech.setText(fechaEvento);
+                        if(res[7].trim().length() >0 ){
                             bx.setVisibility(View.VISIBLE);
                             bx.setText("X (" + res[7].trim() + ")");
                         } else {
@@ -936,7 +1134,8 @@ public class Principal extends ActionBarActivity {
                         dw2.execute(con2);
                         break;
                     case 1:
-
+                        TextView coinsEve   = (TextView) findViewById(R.id.coinsEvento);
+                        coinsEve.setText("Aun dispone de "+coinsActual+" coins para apostar");
                     if (res.length>=2){
                         int coin = Integer.parseInt(res[0].trim());
                         if (coin > 0) {
@@ -954,8 +1153,7 @@ public class Principal extends ActionBarActivity {
 
                         TextView texto = (TextView) findViewById(R.id.textApostado);
                         texto.setText("Has apostado a " + pronostico + " y un total de " + coin + " coins.");
-                        TextView coinsEve   = (TextView) findViewById(R.id.coinsEvento);
-                        coinsEve.setText("Aun dispone de "+coinsActual+" coins para apostar");
+
                     }
                         break;
                     case 2:
@@ -966,7 +1164,6 @@ public class Principal extends ActionBarActivity {
                         ressul.execute(consulta);
                         break;
                 }
-
             } else if (posicion==3) {
                 switch (opcion) {
                     case 0:
@@ -1007,6 +1204,7 @@ public class Principal extends ActionBarActivity {
                                 productos.add(pro);
                             }
                         }
+
                 }
             } else if (posicion==4) {
                 switch (opcion) {
@@ -1026,7 +1224,6 @@ public class Principal extends ActionBarActivity {
                         String con2 = ("SELECT id, nombre, coins FROM premios where activado=true;").replace(" ", "%20");
                         opcion = 1;
                         dw2.execute(con2);
-
                         break;
 
                     case 1:
@@ -1047,11 +1244,81 @@ public class Principal extends ActionBarActivity {
                                 productos.add(pro);
                             }
                         }
+
                         break;
                 }
 
+            } else if(posicion==2){
+                switch (opcion){
+                    case 0:
+                        int total = (Integer.parseInt(res[0].trim())-1) - (pagEvento-15);
+                        Button bmenos = (Button) findViewById(R.id.btMenosEvento);
+                        Button bmas = (Button) findViewById(R.id.btMasEvento);
+                        for (int i = 0; i < listaBotones.size(); i++) {
+                            Button n = (Button) findViewById(listaBotones.get(i));
+                            n.setVisibility(View.VISIBLE);
+                        }
 
+                        if (total <= 15) {
+
+
+                            for (int i = total; i < listaBotones.size(); i++) {
+                                Button n = (Button) findViewById(listaBotones.get(i));
+                                n.setVisibility(View.GONE);
+                            }
+
+                            bmas.setVisibility(View.GONE);
+
+                        } else {
+
+
+
+                            bmas.setVisibility(View.VISIBLE);
+                        }
+                        if (pagEvento > 15)
+                            bmenos.setVisibility(View.VISIBLE);
+                        else
+                            bmenos.setVisibility(View.GONE);
+                        opcion = 1;
+                        DownloadTask dw2 = new DownloadTask();
+                        String con2 = ("SELECT id, participante_casa , participante_visitante , fecha_hora , deporte  FROM v_eventos_participantes where activado=true and fecha_hora  > now()  "+  where +" order by fecha_hora limit "+ (pagEvento-15)+","+pagEvento+";").replace(" ", "%20");
+
+                        dw2.execute(con2);
+                        break;
+                    case 1:
+                        listaIdPartidos = new ArrayList<>();
+                        int index = 0;
+                        for (int i = 0; i <= res.length - 5; i = i + 5) {
+                            listaIdPartidos.add(Integer.parseInt(res[i].toString().trim()));
+                            Button n = (Button) findViewById(listaBotones.get(index++));
+
+                            if (n.getVisibility() == View.VISIBLE) {
+                                n.setText(res[i + 1] + " vs " + res[i + 2] + " \n " + res[i + 3]);
+                                switch (res[i + 4].trim()) {
+                                    case "Fútbol":
+                                        n.setBackgroundColor(Color.rgb(186, 255, 186));
+                                        break;
+                                    case "Baloncesto":
+                                        n.setBackgroundColor(Color.rgb(255, 215, 186));
+                                        break;
+                                    case "Tenis":
+                                        n.setBackgroundColor(Color.rgb(251, 255, 186));
+                                        break;
+                                    case "E-sport":
+                                        n.setBackgroundColor(Color.rgb(236, 186, 255));
+                                        break;
+                                    case "Mas deportes":
+                                        n.setBackgroundColor(Color.rgb(186, 255, 251));
+                                        break;
+
+                                }
+                            }
+                        }
+                        break;
+                }
             }
+            progress.dismiss();
+            progress.cancel();
 
 
 
@@ -1059,19 +1326,21 @@ public class Principal extends ActionBarActivity {
 
 
 
+
+
         private String downloadContent(String myurl) throws IOException {
             InputStream is = null;
-            int length = 500;
-            this.url = myurl;
+            int length = 2000;
+
             try {
-                String ur = "http://192.168.0.201:8080/usuario/consulta.php?consulta="+myurl;
+                String ur = direccion + "/usuario/consulta.php?consulta="+myurl;
                 if(cogerPublicdad){
-                    ur = "http://192.168.0.201:8080/usuario/cogerPublicidad.php?id="+idUsuario;
+                    ur = direccion + "/usuario/cogerPublicidad.php?id="+idUsuario;
                     cogerPublicdad = false;
                 }
 
                 if(darDineroPublicidad){
-                    ur = "http://192.168.0.201:8080/usuario/dineroPublicidad.php?coins="+coinsPubli+"&id="+idUsuario;
+                    ur = direccion + "/usuario/dineroPublicidad.php?coins="+coinsPubli+"&id="+idUsuario;
                     darDineroPublicidad = false;
                 }
 
@@ -1083,6 +1352,16 @@ public class Principal extends ActionBarActivity {
                 if (apuesta){
                     ur = myurl;
                     apuesta=false;
+                }
+
+                if(cogerMasApostado){
+                    ur = myurl;
+                    cogerMasApostado=false;
+                }
+
+                if(premios){
+                    ur = myurl;
+                    premios = false;
                 }
 
                 URL url = new URL(ur);

@@ -22,8 +22,9 @@
         </activity>
         <activity
             android:name=".Principal"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".RegistroActivity"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".RegistroActivity" />
+        <activity android:name=".PremiosConseguidosActivity"></activity>
     </application>
 
 </manifest>

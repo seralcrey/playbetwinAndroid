@@ -41,13 +41,12 @@ public class RegistroActivity extends Activity {
 
 
     public void abrirLogin(){
-        Intent i = new Intent(this, Login.class);
-        startActivity(i);
+        this.finish();
 
     }
 
     public void registrarUsuario(View v){
-        new Email("sergio.alcantara.1992@gmail.com","prueba", "pre");
+
 
         String emailRegexp = "[^@]+@[^@]+\\.[a-zA-Z]{2,}";
         System.out.println(Pattern.matches(emailRegexp, "a@b.com"));
@@ -138,26 +137,29 @@ public class RegistroActivity extends Activity {
             }
 
             if(opcion==2){
-                abrirLogin();
+
                 Toast toast1 =
                         Toast.makeText(getApplicationContext(),
                                 "Se ha registrado, ya puedes apostar en play bet win", Toast.LENGTH_LONG);
                 toast1.show();
-
-
+                new Email().execute(new Email.Mail(textEmail.getText().toString().trim() , "PLAY BET WIN", "Gracias "+ textNombre.getText().toString().trim() +", se ha registrado en PLAY BET WIN. " +
+                                                                                                                        "Espero que disfrute de nuestra aplicación y que consiga muchos premios")
+                );
+                abrirLogin();
             }
 
 
 
         }
 
+        String direccion = "http://192.168.1.3:8080";
 
         private String downloadContent(String myurl) throws IOException {
             InputStream is = null;
             int length = 500;
 
             try {
-                URL url = new URL("http://192.168.0.201:8080/usuario/consulta.php?consulta="+myurl);
+                URL url = new URL(direccion + "/usuario/consulta.php?consulta="+myurl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(10000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);

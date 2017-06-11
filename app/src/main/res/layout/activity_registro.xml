@@ -110,7 +110,7 @@
             android:layout_column="0"
             android:layout_gravity="center_horizontal"
             android:background="#0d3f53"
-            android:textColor="@color/abc_background_cache_hint_selector_material_light"
+            android:textColor="#fff"
             android:textStyle="bold"
             android:onClick="registrarUsuario" />
 

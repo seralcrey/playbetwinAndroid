@@ -23,7 +23,7 @@ public class Login extends Activity {
 
 
     TextView usuario,pass, error;
-
+    String direccion = "http://192.168.1.3:8080";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +40,6 @@ public class Login extends Activity {
         DownloadTask ressul = new DownloadTask(this);
         String consulta = ("select nick ,password, id from usuarios where nick = \""+ usuario.getText() + "\" and activado=true").replace(" ", "%20");
         ressul.execute(consulta);
-
     }
 
 
@@ -127,7 +126,7 @@ public class Login extends Activity {
             int length = 500;
 
             try {
-                URL url = new URL("http://192.168.0.201:8080/usuario/consulta.php?consulta="+myurl);
+                URL url = new URL(direccion + "/usuario/consulta.php?consulta="+myurl);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setReadTimeout(10000 /* milliseconds */);
                 conn.setConnectTimeout(15000 /* milliseconds */);

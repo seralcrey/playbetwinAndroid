@@ -79,7 +79,8 @@
                 android:layout_column="0"
                 android:layout_columnSpan="3"
                 android:layout_margin="1dp"
-                android:onClick="abrirEven" />
+                android:onClick="abrirEven"
+                android:visibility="gone" />
 
             <Button
                 android:layout_width="match_parent"
@@ -90,7 +91,8 @@
                 android:layout_column="0"
                 android:layout_columnSpan="3"
                 android:layout_margin="1dp"
-                android:onClick="abrirEven" />
+                android:onClick="abrirEven"
+                android:visibility="gone" />
 
             <Button
                 android:layout_width="match_parent"
@@ -101,7 +103,8 @@
                 android:layout_column="0"
                 android:layout_columnSpan="3"
                 android:layout_margin="1dp"
-                android:onClick="abrirEven" />
+                android:onClick="abrirEven"
+                android:visibility="gone" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -166,7 +169,8 @@
                 android:layout_column="0"
                 android:layout_columnSpan="3"
                 android:layout_margin="1dp"
-                android:onClick="abrirEven" />
+                android:onClick="abrirEven"
+                android:visibility="gone" />
 
             <Button
                 android:layout_width="match_parent"
@@ -177,7 +181,8 @@
                 android:layout_column="0"
                 android:layout_columnSpan="3"
                 android:layout_margin="1dp"
-                android:onClick="abrirEven" />
+                android:onClick="abrirEven"
+                android:visibility="gone" />
 
             <Button
                 android:layout_width="match_parent"
@@ -188,7 +193,8 @@
                 android:layout_column="0"
                 android:layout_columnSpan="3"
                 android:layout_margin="1dp"
-                android:onClick="abrirEven" />
+                android:onClick="abrirEven"
+                android:visibility="gone" />
 
             <Button
                 android:layout_width="match_parent"
@@ -199,7 +205,8 @@
                 android:layout_column="0"
                 android:layout_columnSpan="3"
                 android:layout_margin="1dp"
-                android:onClick="abrirEven" />
+                android:onClick="abrirEven"
+                android:visibility="gone" />
 
             <Button
                 style="?android:attr/buttonStyleSmall"

@@ -1,14 +1,13 @@
 package com.example.sergio.playbetwincliente;
 
 
-import android.content.Intent;
-import android.net.Uri;
-import android.widget.Toast;
+import android.os.AsyncTask;
+import android.util.Log;
 
 import java.util.Properties;
 
-import javax.mail.Authenticator;
 import javax.mail.Message;
+import javax.mail.MessagingException;
 import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import javax.mail.Transport;
@@ -18,60 +17,63 @@ import javax.mail.internet.MimeMessage;
 /**
  * Created by Sergio on 29/05/2017.
  */
-public class Email {
-    final String miCorreo = "sergio.alcantara.1992@gmail.com";
-    final String miContraseña = "Alcantara1992";
-    final String servidorSMTP = "smtp.gmail.com";
-    final String puertoEnvio = "465";
-    String mailReceptor = null;
-    String asunto = null;
-    String cuerpo = null;
+public class Email extends AsyncTask<Email.Mail,Void,Void> {
+    private  String user;
+    private  String pass;
 
-    public Email(String mailReceptor, String asunto,
-                      String cuerpo) {
+    public Email() {
+        super();
+        this.user="sergio.alcantara.1992@gmail.com";
+        this.pass="Alcantara1992";
+    }
 
-        this.mailReceptor = mailReceptor;
-        this.asunto = asunto;
-        this.cuerpo = cuerpo;
 
+    @Override
+    protected Void doInBackground(Mail... mails) {
         Properties props = new Properties();
-        props.put("mail.smtp.user", miCorreo);
-        props.put("mail.smtp.host", servidorSMTP);
-        props.put("mail.smtp.port", puertoEnvio);
-        props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.socketFactory.port", puertoEnvio);
-        props.put("mail.smtp.socketFactory.class",
-                "javax.net.ssl.SSLSocketFactory");
-        props.put("mail.smtp.socketFactory.fallback", "false");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
 
-        SecurityManager security = System.getSecurityManager();
+        Session session = Session.getInstance(props,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(user, pass);
+                    }
+                });
+        for (Mail mail:mails) {
 
-        try {
-            Authenticator auth = new autentificadorSMTP();
-            Session session = Session.getInstance(props, auth);
-            // session.setDebug(true);
+            try {
 
-            MimeMessage msg = new MimeMessage(session);
-            msg.setText(cuerpo);
-            msg.setSubject(asunto);
-            msg.setFrom(new InternetAddress(miCorreo));
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
-                    mailReceptor));
-            Transport.send(msg);
-        } catch (Exception mex) {
-            mex.printStackTrace();
+                Message message = new MimeMessage(session);
+                message.setFrom(new InternetAddress(mail.from));
+                message.setRecipients(Message.RecipientType.TO,
+                        InternetAddress.parse(mail.to));
+                message.setSubject(mail.subject);
+                message.setText(mail.content);
+
+                Transport.send(message);
+
+            } catch (MessagingException e) {
+                Log.d("MailJob", e.getMessage());
+            }
         }
-
+        return null;
     }
 
-    private class autentificadorSMTP extends javax.mail.Authenticator {
-        public PasswordAuthentication getPasswordAuthentication() {
-            return new PasswordAuthentication(miCorreo, miContraseña);
+
+    public static class Mail{
+        private final String subject;
+        private final String content;
+        private final String from;
+        private final String to;
+
+        public Mail(String to, String subject, String content){
+            this.subject=subject;
+            this.content=content;
+            this.from="sergio.alcantara.1992@gmail.com";
+            this.to=to;
         }
     }
-
-
-
-
 }
